@@ -8,14 +8,14 @@ import com.trustwave.loans.mapper.LoansMapper;
 import com.trustwave.loans.model.Loans;
 import com.trustwave.loans.repository.LoansRepository;
 import com.trustwave.loans.service.ILoansService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Random;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class LoansService implements ILoansService {
   private final LoansRepository loansRepository;
 

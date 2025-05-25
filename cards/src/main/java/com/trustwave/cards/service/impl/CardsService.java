@@ -8,14 +8,14 @@ import com.trustwave.cards.mapper.CardsMapper;
 import com.trustwave.cards.model.Cards;
 import com.trustwave.cards.repository.CardsRepository;
 import com.trustwave.cards.service.ICardsService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Random;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CardsService implements ICardsService {
 
   private final CardsRepository cardsRepository;

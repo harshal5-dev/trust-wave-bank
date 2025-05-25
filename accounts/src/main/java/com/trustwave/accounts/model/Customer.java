@@ -3,13 +3,13 @@ package com.trustwave.accounts.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "customer")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Customer extends BaseModel {
 
   @Column(name = "full_name")

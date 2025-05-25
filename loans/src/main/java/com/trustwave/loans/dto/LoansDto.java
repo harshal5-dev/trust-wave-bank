@@ -1,12 +1,13 @@
 package com.trustwave.loans.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -14,6 +15,8 @@ import lombok.Setter;
 @Schema(name = "Loans",
         description = "Schema to hold Loan information"
 )
+@NoArgsConstructor
+@AllArgsConstructor
 public class LoansDto {
 
   @NotEmpty(message = "Mobile Number can not be a null or empty")

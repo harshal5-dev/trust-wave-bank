@@ -1,7 +1,9 @@
 package com.trustwave.cards.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,6 +18,8 @@ import java.util.UUID;
 @Setter
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
+@AllArgsConstructor
+@NoArgsConstructor
 public abstract class BaseModel {
 
   @Id

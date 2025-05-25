@@ -1,5 +1,6 @@
 server:
   port: 9003
+
 spring:
   application:
     name: loans
@@ -16,3 +17,23 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  config:
+    import:
+      - "application_qa.yml"
+      - "application_prod.yml"
+    profiles:
+      active:
+        - "prod"
+
+
+build:
+  version: "3.0"
+
+loans:
+  message: "Welcome to TrustWave Bank loans related local APIs "
+  contactDetails:
+    name: "John Doe - Developer"
+    email: "john@ttrustwavebank.com"
+  onCallSupport:
+    - (555) 555-1234
+    - (555) 523-1345

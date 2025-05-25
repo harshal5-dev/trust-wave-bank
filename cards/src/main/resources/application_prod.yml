@@ -1,0 +1,17 @@
+
+spring:
+  config:
+    activate:
+      on-profile: "prod"
+
+build:
+  version: "1.0"
+
+accounts:
+  message: "Welcome to TrustWave Bank cards related Proud APIs "
+  contactDetails:
+    name: "John Doe - Product Owner"
+    email: "john@ttrustwavebank.com"
+  onCallSupport:
+    - (555) 555-1234
+    - (555) 523-1345
