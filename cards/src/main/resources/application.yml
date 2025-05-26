@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: cards
+  profiles:
+    active: "prod"
   datasource:
     url: jdbc:h2:mem:trust_wave_db
     username: sa
@@ -18,22 +20,4 @@ spring:
       ddl-auto: update
     show-sql: true
   config:
-    import:
-      - "application_qa.yml"
-      - "application_prod.yml"
-    profiles:
-      active:
-        - "prod"
-
-
-build:
-  version: "3.0"
-
-cards:
-  message: "Welcome to TrustWave Bank cards related local APIs "
-  contactDetails:
-    name: "John Doe - Developer"
-    email: "john@ttrustwavebank.com"
-  onCallSupport:
-    - (555) 555-1234
-    - (555) 523-1345
+    import: "optional:configserver:http://localhost:8071/"

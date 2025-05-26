@@ -1,14 +1,8 @@
-
-spring:
-  config:
-    activate:
-      on-profile: "qa"
-
 build:
   version: "2.0"
 
-accounts:
-  message: "Welcome to TrustWave Bank accounts related QA APIs "
+loans:
+  message: "Welcome to TrustWave Bank loans related QA APIs "
   contactDetails:
     name: "John Doe - QA Developer"
     email: "john@ttrustwavebank.com"
