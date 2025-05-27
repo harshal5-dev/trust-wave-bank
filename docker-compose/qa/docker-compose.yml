@@ -1,0 +1,81 @@
+
+services:
+  rabbit:
+    image: rabbitmq:4-management
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: "rabbitmq-diagnostics check_port_connectivity"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
+  config-server:
+    image: "harshaldev55/config-server:latest"
+    container_name: config-server-ms
+    ports:
+      - "8071:8071"
+    depends_on:
+      rabbit:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-base-config
+
+  accounts:
+    image: "harshaldev55/accounts:latest"
+    container_name: accounts-ms
+    ports:
+      - "9001:9001"
+    depends_on:
+      config-server:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: accounts
+    extends:
+      file: common-config.yml
+      service: microservice-config-server-config
+
+  loans:
+    image: "harshaldev55/loans:latest"
+    container_name: loans-ms
+    ports:
+      - "9003:9003"
+    depends_on:
+      config-server:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: loans
+    extends:
+      file: common-config.yml
+      service: microservice-config-server-config
+
+  cards:
+    image: "harshaldev55/cards:latest"
+    container_name: cards-ms
+    ports:
+      - "9002:9002"
+    depends_on:
+      config-server:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: cards
+    extends:
+      file: common-config.yml
+      service: microservice-config-server-config
+
+networks:
+  trustwave:
+    driver: "bridge"

@@ -10,6 +10,7 @@
     </parent>
     <groupId>com.trustwave</groupId>
     <artifactId>config-server</artifactId>
+    <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <name>config-server</name>
     <description>config-server</description>
@@ -70,6 +71,16 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.4.5</version>
+                <configuration>
+                    <to>
+                        <image>harshaldev55/${project.artifactId}:latest</image>
+                    </to>
+                </configuration>
             </plugin>
         </plugins>
     </build>
