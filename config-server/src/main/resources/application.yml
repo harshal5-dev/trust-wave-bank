@@ -19,11 +19,11 @@ spring:
           timeout: 5
           clone-on-start: true
           force-pull: true
-  rabbitmq:
-    host: "localhost"
-    port: 5672
-    username: "guest"
-    password: "guest"
+#  rabbitmq:
+#    host: "localhost"
+#    port: 5672
+#    username: "guest"
+#    password: "guest"
 
 encrypt:
   key: "e9f3b8b6a5d4719f8473c23f2de0a62c09c59d1f627e4e97fbbc2d1f82e9cba1"

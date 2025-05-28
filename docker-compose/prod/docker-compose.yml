@@ -1,29 +1,65 @@
 
 services:
-  rabbit:
-    image: rabbitmq:4-management
-    hostname: rabbitmq
+  accountsdb:
+    container_name: accountsdb
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: accountsdb
     healthcheck:
-      test: "rabbitmq-diagnostics check_port_connectivity"
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 5s
+      test: ["CMD-SHELL", "pg_isready -U root -d accountsdb"]
     extends:
       file: common-config.yml
-      service: network-deploy-service
+      service: microservice-db-config
+
+  loansdb:
+    container_name: loansdb
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_DB: loansdb
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U root -d loansdb"]
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
+
+  cardsdb:
+    container_name: cardsdb
+    ports:
+      - "5436:5432"
+    environment:
+      POSTGRES_DB: cardsdb
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U root -d cardsdb"]
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
+
+#  rabbit:
+#    image: rabbitmq:4-management
+#    hostname: rabbitmq
+#    ports:
+#      - "5672:5672"
+#      - "15672:15672"
+#    healthcheck:
+#      test: "rabbitmq-diagnostics check_port_connectivity"
+#      interval: 10s
+#      timeout: 5s
+#      retries: 10
+#      start_period: 5s
+#    extends:
+#      file: common-config.yml
+#      service: network-deploy-service
 
   config-server:
     image: "harshaldev55/config-server:latest"
     container_name: config-server-ms
     ports:
       - "8071:8071"
-    depends_on:
-      rabbit:
-        condition: service_healthy
+#    depends_on:
+#      rabbit:
+#        condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
       interval: 10s
@@ -42,8 +78,11 @@ services:
     depends_on:
       config-server:
         condition: service_healthy
+      accountsdb:
+        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: accounts
+      SPRING_DATASOURCE_URL: jdbc:postgresql://accountsdb:5432/accountsdb
     extends:
       file: common-config.yml
       service: microservice-config-server-config
@@ -56,8 +95,11 @@ services:
     depends_on:
       config-server:
         condition: service_healthy
+      loansdb:
+        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: loans
+      SPRING_DATASOURCE_URL: jdbc:postgresql://loansdb:5432/loansdb
     extends:
       file: common-config.yml
       service: microservice-config-server-config
@@ -70,8 +112,11 @@ services:
     depends_on:
       config-server:
         condition: service_healthy
+      cardsdb:
+        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: cards
+      SPRING_DATASOURCE_URL: jdbc:postgresql://cardsdb:5432/cardsdb
     extends:
       file: common-config.yml
       service: microservice-config-server-config
