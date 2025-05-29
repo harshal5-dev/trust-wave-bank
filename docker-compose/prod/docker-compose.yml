@@ -1,40 +1,40 @@
 
 services:
-  accountsdb:
-    container_name: accountsdb
-    ports:
-      - "5434:5432"
-    environment:
-      POSTGRES_DB: accountsdb
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U root -d accountsdb"]
-    extends:
-      file: common-config.yml
-      service: microservice-db-config
-
-  loansdb:
-    container_name: loansdb
-    ports:
-      - "5435:5432"
-    environment:
-      POSTGRES_DB: loansdb
-    healthcheck:
-        test: ["CMD-SHELL", "pg_isready -U root -d loansdb"]
-    extends:
-      file: common-config.yml
-      service: microservice-db-config
-
-  cardsdb:
-    container_name: cardsdb
-    ports:
-      - "5436:5432"
-    environment:
-      POSTGRES_DB: cardsdb
-    healthcheck:
-        test: ["CMD-SHELL", "pg_isready -U root -d cardsdb"]
-    extends:
-      file: common-config.yml
-      service: microservice-db-config
+#  accountsdb:
+#    container_name: accountsdb
+#    ports:
+#      - "5434:5432"
+#    environment:
+#      POSTGRES_DB: accountsdb
+#    healthcheck:
+#      test: ["CMD-SHELL", "pg_isready -U root -d accountsdb"]
+#    extends:
+#      file: common-config.yml
+#      service: microservice-db-config
+#
+#  loansdb:
+#    container_name: loansdb
+#    ports:
+#      - "5435:5432"
+#    environment:
+#      POSTGRES_DB: loansdb
+#    healthcheck:
+#        test: ["CMD-SHELL", "pg_isready -U root -d loansdb"]
+#    extends:
+#      file: common-config.yml
+#      service: microservice-db-config
+#
+#  cardsdb:
+#    container_name: cardsdb
+#    ports:
+#      - "5436:5432"
+#    environment:
+#      POSTGRES_DB: cardsdb
+#    healthcheck:
+#        test: ["CMD-SHELL", "pg_isready -U root -d cardsdb"]
+#    extends:
+#      file: common-config.yml
+#      service: microservice-db-config
 
 #  rabbit:
 #    image: rabbitmq:4-management
@@ -70,6 +70,26 @@ services:
       file: common-config.yml
       service: microservice-base-config
 
+  eureka-discovery-server:
+    image: "harshaldev55/eureka-discovery-server:latest"
+    container_name: eureka-discovery-server-ms
+    ports:
+      - "8070:8070"
+    depends_on:
+      config-server:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-config-server-config
+    environment:
+      SPRING_APPLICATION_NAME: "eureka-discovery-server"
+
   accounts:
     image: "harshaldev55/accounts:latest"
     container_name: accounts-ms
@@ -78,14 +98,16 @@ services:
     depends_on:
       config-server:
         condition: service_healthy
-      accountsdb:
-        condition: service_healthy
+#      accountsdb:
+#        condition: service_healthy
+      eureka-discovery-server:
+       condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: accounts
-      SPRING_DATASOURCE_URL: jdbc:postgresql://accountsdb:5432/accountsdb
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://accountsdb:5432/accountsdb
     extends:
       file: common-config.yml
-      service: microservice-config-server-config
+      service: microservice-eureka-config
 
   loans:
     image: "harshaldev55/loans:latest"
@@ -95,14 +117,16 @@ services:
     depends_on:
       config-server:
         condition: service_healthy
-      loansdb:
+#      loansdb:
+#        condition: service_healthy
+      eureka-discovery-server:
         condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: loans
-      SPRING_DATASOURCE_URL: jdbc:postgresql://loansdb:5432/loansdb
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://loansdb:5432/loansdb
     extends:
       file: common-config.yml
-      service: microservice-config-server-config
+      service: microservice-eureka-config
 
   cards:
     image: "harshaldev55/cards:latest"
@@ -112,14 +136,16 @@ services:
     depends_on:
       config-server:
         condition: service_healthy
-      cardsdb:
+#      cardsdb:
+#        condition: service_healthy
+      eureka-discovery-server:
         condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: cards
-      SPRING_DATASOURCE_URL: jdbc:postgresql://cardsdb:5432/cardsdb
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://cardsdb:5432/cardsdb
     extends:
       file: common-config.yml
-      service: microservice-config-server-config
+      service: microservice-eureka-config
 
 networks:
   trustwave:
