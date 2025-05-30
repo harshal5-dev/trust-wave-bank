@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
         description = "CRUD REST APIs in TrustWave Bank to CREATE, READ, UPDATE and DELETE account details."
 )
 @RestController
-@RequestMapping(path = "/accounts", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public class AccountController {
 
