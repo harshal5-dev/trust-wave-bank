@@ -22,7 +22,9 @@ public class ApiGatewayApplication {
 				.route(p -> p
 								.path("/trustwavebank/accounts/**")
 								.filters(f -> f.rewritePath("/trustwavebank/accounts/(?<segment>.*)", "/${segment}")
-												.addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+												.addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
+												.circuitBreaker(config -> config.setName("accountsCircuitBraker")
+																.setFallbackUri("forward:/contactSupport")))
 								.uri("lb://ACCOUNTS"))
 						.route(p -> p
 										.path("/trustwavebank/loans/**")

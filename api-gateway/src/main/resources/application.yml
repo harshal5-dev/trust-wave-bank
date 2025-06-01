@@ -9,6 +9,11 @@ spring:
         locator:
           enabled: false
           lower-case-service-id: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:7080/realms/master/protocol/openid-connect/certs
 #  rabbitmq:
 #    host: "localhost"
 #    port: 5672
@@ -38,3 +43,13 @@ logging:
     com:
       trustwave:
         apigateway: DEBUG
+
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 2
+        waitDurationInOpenState: 10000ms
+        failureRateThreshold: 50
