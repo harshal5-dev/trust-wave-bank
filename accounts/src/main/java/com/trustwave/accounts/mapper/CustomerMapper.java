@@ -4,7 +4,7 @@ import com.trustwave.accounts.dto.CustomerDetailsDto;
 import com.trustwave.accounts.dto.CustomerDto;
 import com.trustwave.accounts.model.Customer;
 
-public class CustomerMapper {
+public final class CustomerMapper {
   public static CustomerDto mapToCustomerDto(Customer customer, CustomerDto customerDto) {
     customerDto.setFullName(customer.getFullName());
     customerDto.setEmail(customer.getEmail());

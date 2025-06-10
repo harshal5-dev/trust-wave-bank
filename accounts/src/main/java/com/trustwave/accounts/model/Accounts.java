@@ -1,10 +1,9 @@
 package com.trustwave.accounts.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.UUID;
 
@@ -12,8 +11,7 @@ import java.util.UUID;
 @Table(name = "accounts")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@ToString
 public class Accounts extends BaseModel {
 
   @Column(name = "account_number")

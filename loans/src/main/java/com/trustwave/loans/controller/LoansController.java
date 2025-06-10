@@ -1,7 +1,7 @@
 package com.trustwave.loans.controller;
 
 import com.trustwave.loans.constants.LoansConstants;
-import com.trustwave.loans.dto.AccountsContactInfoDto;
+import com.trustwave.loans.dto.LoansContactInfoDto;
 import com.trustwave.loans.dto.ErrorResponseDto;
 import com.trustwave.loans.dto.LoansDto;
 import com.trustwave.loans.dto.ResponseDto;
@@ -39,16 +39,16 @@ public class LoansController {
 
   private final ILoansService iLoansService;
   private final Environment environment;
-  private final AccountsContactInfoDto accountsContactInfoDto;
+  private final LoansContactInfoDto loansContactInfoDto;
 
   private static final Logger logger = LoggerFactory.getLogger(LoansController.class);
 
   public LoansController(ILoansService iLoansService,
                          Environment environment,
-                         AccountsContactInfoDto accountsContactInfoDto) {
+                         LoansContactInfoDto loansContactInfoDto) {
     this.iLoansService = iLoansService;
     this.environment = environment;
-    this.accountsContactInfoDto = accountsContactInfoDto;
+    this.loansContactInfoDto = loansContactInfoDto;
   }
 
 
@@ -75,10 +75,11 @@ public class LoansController {
                                                   @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
                                                 String mobileNumber) {
     iLoansService.createLoan(mobileNumber);
+    ResponseDto responseDto = new ResponseDto(LoansConstants.STATUS_201, LoansConstants.MESSAGE_201);
 
     return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(new ResponseDto(LoansConstants.STATUS_201, LoansConstants.MESSAGE_201));
+            .body(responseDto);
   }
 
   @Operation(
@@ -256,10 +257,11 @@ public class LoansController {
   }
   )
   @GetMapping("/contact-info")
-  public ResponseEntity<AccountsContactInfoDto> getContactInfo() {
+  public ResponseEntity<LoansContactInfoDto> getContactInfo() {
+  logger.debug("Fetching contact info for Loans microservice");
     return ResponseEntity
             .status(HttpStatus.OK)
-            .body(accountsContactInfoDto);
+            .body(loansContactInfoDto);
   }
 
 }

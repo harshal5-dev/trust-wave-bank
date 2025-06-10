@@ -1,7 +1,7 @@
 package com.trustwave.cards.controller;
 
 import com.trustwave.cards.constants.CardsConstants;
-import com.trustwave.cards.dto.AccountsContactInfoDto;
+import com.trustwave.cards.dto.CardsContactInfoDto;
 import com.trustwave.cards.dto.CardsDto;
 import com.trustwave.cards.dto.ErrorResponseDto;
 import com.trustwave.cards.dto.ResponseDto;
@@ -42,16 +42,16 @@ public class CardsController {
 
   private final ICardsService iCardsService;
   private final Environment environment;
-  private final AccountsContactInfoDto accountsContactInfoDto;
+  private final CardsContactInfoDto cardsContactInfoDto;
 
   private static final Logger logger = LoggerFactory.getLogger(CardsController.class);
 
   public CardsController(ICardsService iCardsService,
                          Environment environment,
-                         AccountsContactInfoDto accountsContactInfoDto)  {
+                         CardsContactInfoDto cardsContactInfoDto)  {
     this.iCardsService = iCardsService;
     this.environment = environment;
-    this.accountsContactInfoDto = accountsContactInfoDto;
+    this.cardsContactInfoDto = cardsContactInfoDto;
   }
 
   @Operation(
@@ -77,9 +77,10 @@ public class CardsController {
                                                   @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
                                                 String mobileNumber) {
     iCardsService.createCard(mobileNumber);
+    ResponseDto responseDto = new ResponseDto(CardsConstants.STATUS_201, CardsConstants.MESSAGE_201);
     return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(new ResponseDto(CardsConstants.STATUS_201, CardsConstants.MESSAGE_201));
+            .body(responseDto);
   }
 
   @Operation(
@@ -254,10 +255,10 @@ public class CardsController {
   }
   )
   @GetMapping("/contact-info")
-  public ResponseEntity<AccountsContactInfoDto> getContactInfo() {
+  public ResponseEntity<CardsContactInfoDto> getContactInfo() {
     return ResponseEntity
             .status(HttpStatus.OK)
-            .body(accountsContactInfoDto);
+            .body(cardsContactInfoDto);
   }
 
 }

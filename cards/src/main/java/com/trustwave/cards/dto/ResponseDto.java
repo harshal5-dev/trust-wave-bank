@@ -1,19 +1,14 @@
 package com.trustwave.cards.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Schema(
         name = "Response",
         description = "Schema to hold successful response information"
 )
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class ResponseDto {
 
   @Schema(

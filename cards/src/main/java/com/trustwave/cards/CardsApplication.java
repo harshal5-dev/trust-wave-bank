@@ -1,6 +1,6 @@
 package com.trustwave.cards;
 
-import com.trustwave.cards.dto.AccountsContactInfoDto;
+import com.trustwave.cards.dto.CardsContactInfoDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
@@ -14,7 +14,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableJpaAuditing(auditorAwareRef = "auditorAwareImpl")
-@EnableConfigurationProperties(value = {AccountsContactInfoDto.class})
+@EnableConfigurationProperties(value = {CardsContactInfoDto.class})
 @OpenAPIDefinition(
         info = @Info(
                 title = "Cards microservice REST API Documentation",

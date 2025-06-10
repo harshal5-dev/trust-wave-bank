@@ -8,8 +8,7 @@ import lombok.*;
 @Setter
 @Entity
 @Table(name = "customer")
-@NoArgsConstructor
-@AllArgsConstructor
+@ToString
 public class Customer extends BaseModel {
 
   @Column(name = "full_name")

@@ -9,11 +9,15 @@ spring:
         locator:
           enabled: false
           lower-case-service-id: true
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: http://localhost:7080/realms/master/protocol/openid-connect/certs
+      httpclient:
+        connect-timeout: 30000
+        response-timeout: 5s
+
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          jwk-set-uri: http://localhost:7080/realms/master/protocol/openid-connect/certs
 #  rabbitmq:
 #    host: "localhost"
 #    port: 5672

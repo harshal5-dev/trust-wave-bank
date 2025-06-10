@@ -3,17 +3,15 @@ package com.trustwave.cards.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-@Getter
 @Setter
+@Getter
 @Entity
 @Table(name = "cards")
-@NoArgsConstructor
-@AllArgsConstructor
+@ToString
 public class Cards extends BaseModel {
 
   @Column(name = "mobile_number", unique = true, length = 15, nullable = false)
