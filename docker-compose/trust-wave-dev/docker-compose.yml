@@ -52,8 +52,20 @@ services:
 #      file: common-config.yml
 #      service: network-deploy-service
 
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      timeout: 10s
+      retries: 10
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
   config-server:
-    image: "harshaldev55/config-server:latest"
+    image: "harshaldev55/config-server:v1"
     container_name: config-server-ms
     ports:
       - "8071:8071"
@@ -71,7 +83,7 @@ services:
       service: microservice-base-config
 
   eureka-discovery-server:
-    image: "harshaldev55/eureka-discovery-server:latest"
+    image: "harshaldev55/eureka-discovery-server:v1"
     container_name: eureka-discovery-server-ms
     ports:
       - "8070:8070"
@@ -91,7 +103,7 @@ services:
       SPRING_APPLICATION_NAME: "eureka-discovery-server"
 
   accounts:
-    image: "harshaldev55/accounts:latest"
+    image: "harshaldev55/accounts:v1"
     container_name: accounts-ms
     ports:
       - "9001:9001"
@@ -116,7 +128,7 @@ services:
       service: microservice-eureka-config
 
   loans:
-    image: "harshaldev55/loans:latest"
+    image: "harshaldev55/loans:v1"
     container_name: loans-ms
     ports:
       - "9003:9003"
@@ -141,7 +153,7 @@ services:
       service: microservice-eureka-config
 
   cards:
-    image: "harshaldev55/cards:latest"
+    image: "harshaldev55/cards:v1"
     container_name: cards-ms
     ports:
       - "9002:9002"
@@ -166,22 +178,25 @@ services:
       service: microservice-eureka-config
 
   api-gateway:
-    image: "harshaldev55/api-gateway:latest"
+    image: "harshaldev55/api-gateway:v1"
     container_name: api-gateway-ms
     ports:
       - "8072:8072"
     depends_on:
       accounts:
         condition: service_healthy
-      #      cardsdb:
-      #        condition: service_healthy
       loans:
         condition: service_healthy
       cards:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: api-gateway
-    #      SPRING_DATASOURCE_URL: jdbc:postgresql://cardsdb:5432/cardsdb
+      SPRING_DATA_REDIS_CONNECT-TIMEOUT: 2s
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATA_REDIS_TIMEOUT: 1s
     extends:
       file: common-config.yml
       service: microservice-eureka-config

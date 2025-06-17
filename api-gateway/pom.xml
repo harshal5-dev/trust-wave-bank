@@ -49,6 +49,11 @@
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+		</dependency>
+
 <!--		<dependency>-->
 <!--			<groupId>org.springframework.boot</groupId>-->
 <!--			<artifactId>spring-boot-starter-security</artifactId>-->
@@ -108,7 +113,7 @@
 				<version>3.4.5</version>
 				<configuration>
 					<to>
-						<image>harshaldev55/${project.artifactId}:latest</image>
+						<image>harshaldev55/${project.artifactId}:v1</image>
 					</to>
 				</configuration>
 			</plugin>

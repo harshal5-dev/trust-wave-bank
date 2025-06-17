@@ -1,6 +1,12 @@
 spring:
   application:
     name: api-gateway
+  data:
+    redis:
+      connect-timeout: 2s
+      host: localhost
+      port: 6379
+      timeout: 1s
   config:
     import: "optional:configserver:http://localhost:8071/"
   cloud:
