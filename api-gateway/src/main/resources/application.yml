@@ -17,7 +17,7 @@ spring:
           lower-case-service-id: true
       httpclient:
         connect-timeout: 30000
-        response-timeout: 5s
+        response-timeout: 10s
 
 #  security:
 #    oauth2:
@@ -41,6 +41,9 @@ management:
   info:
     env:
       enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 info:
   app:

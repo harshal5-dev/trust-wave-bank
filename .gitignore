@@ -1,0 +1,48 @@
+# Maven
+**/target/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Jib cache
+**/jib-cache/
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+*.data
+
+# Environment files
+.env
+
+# Misc
+*.swp
+*.swo
+
+# Ignore generated files
+**/generated-sources/
+**/generated-test-sources/
+
+# Ignore surefire reports
+**/surefire-reports/
+
+# Ignore application local config
+**/application-local.yml
