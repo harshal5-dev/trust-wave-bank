@@ -56,8 +56,9 @@ public class CustomerController {
   public ResponseEntity<CustomerDetailsDto> fetchCustomerDetails(@RequestHeader("trustwave-correlation-id") String correlationId,
                                                                  @RequestParam
                                                                  @Pattern(regexp = "^\\d{10}$", message = "Mobile number should be 10 digits") String mobileNumber) {
-    logger.debug("TrustWave-correlation-id found: {}", correlationId);
+    logger.debug("fetchCustomerDetails method start");
     CustomerDetailsDto customerDetails = iCustomerService.getCustomerDetails(mobileNumber, correlationId);
+    logger.debug("fetchCustomerDetails method end");
     return ResponseEntity.ok(customerDetails);
   }
 }

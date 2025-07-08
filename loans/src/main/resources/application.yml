@@ -72,7 +72,9 @@ info:
     version: "1.0.0"
 
 logging:
-    level:
-      com:
-        trustwave:
-          loans: DEBUG
+  level:
+    com:
+      trustwave:
+        loans: DEBUG
+  pattern:
+    console: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"

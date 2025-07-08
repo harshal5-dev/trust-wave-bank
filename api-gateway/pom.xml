@@ -30,11 +30,18 @@
 	<properties>
 		<java.version>21</java.version>
 		<spring-cloud.version>2025.0.0-RC1</spring-cloud.version>
+		<otelVersion>2.11.0</otelVersion>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry.javaagent</groupId>
+			<artifactId>opentelemetry-javaagent</artifactId>
+			<version>${otelVersion}</version>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -118,7 +125,7 @@
 				<version>3.4.5</version>
 				<configuration>
 					<to>
-						<image>harshaldev55/${project.artifactId}:v1</image>
+						<image>harshaldev55/tw-${project.artifactId}:v1</image>
 					</to>
 				</configuration>
 			</plugin>

@@ -83,6 +83,8 @@ logging:
     com:
       trustwave:
         accounts: DEBUG
+  pattern:
+    console: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
 
 resilience4j:
   circuitbreaker:

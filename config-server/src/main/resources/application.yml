@@ -46,3 +46,11 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+
+logging:
+  level:
+    com:
+      trustwave:
+        configserver: DEBUG
+  pattern:
+    console: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"

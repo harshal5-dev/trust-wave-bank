@@ -56,6 +56,8 @@ logging:
     com:
       trustwave:
         apigateway: DEBUG
+  pattern:
+    console: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
 
 
 resilience4j:

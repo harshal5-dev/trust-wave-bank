@@ -105,8 +105,9 @@ public class CardsController {
                                                   @RequestParam
                                                   @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
                                                 String mobileNumber) {
-    logger.debug("TrustWave-correlation-id found: {}", correlationId);
+    logger.debug("fetchCardsDetails method start");
     CardsDto cardsDto = iCardsService.fetchCard(mobileNumber);
+    logger.debug("fetchCardsDetails method end");
     return ResponseEntity
             .status(HttpStatus.OK)
             .body(cardsDto);

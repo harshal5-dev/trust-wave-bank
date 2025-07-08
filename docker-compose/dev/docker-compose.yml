@@ -1,6 +1,7 @@
 
-services:
+name: "trust-wave-prod"
 
+services:
   read:
     image: grafana/loki:latest
     command: "-config.file=/etc/loki/config.yaml -target=read"
@@ -89,6 +90,19 @@ services:
       - "9090:9090"
     volumes:
       - ../observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
+  tempo:
+    image: grafana/tempo:2.6.1
+    container_name: tempo
+    command: -config.file /etc/tempo-config.yml
+    ports:
+      - "3110:3100"
+      - "4318:4318"
+    volumes:
+      - ../observability/tempo/tempo.yml:/etc/tempo-config.yml
     extends:
       file: common-config.yml
       service: network-deploy-service
@@ -272,14 +286,16 @@ services:
     container_name: config-server-ms
     ports:
       - "8071:8071"
+    environment:
+      OTEL_SERVICE_NAME: config-server
 #    depends_on:
 #      rabbit:
 #        condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 10
+      retries: 20
       start_period: 10s
     extends:
       file: common-config.yml
@@ -295,15 +311,16 @@ services:
         condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 10
+      retries: 20
       start_period: 10s
     extends:
       file: common-config.yml
       service: microservice-config-server-config
     environment:
       SPRING_APPLICATION_NAME: "eureka-discovery-server"
+      OTEL_SERVICE_NAME: "eureka-discovery-server"
 
   accounts:
     image: "harshaldev55/accounts:v1"
@@ -319,12 +336,13 @@ services:
        condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:9001/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 10
+      retries: 20
       start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: accounts
+      OTEL_SERVICE_NAME: accounts
 #      SPRING_DATASOURCE_URL: jdbc:postgresql://accountsdb:5432/accountsdb
     extends:
       file: common-config.yml
@@ -344,12 +362,13 @@ services:
         condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:9003/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 10
+      retries: 20
       start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: loans
+      OTEL_SERVICE_NAME: loans
 #      SPRING_DATASOURCE_URL: jdbc:postgresql://loansdb:5432/loansdb
     extends:
       file: common-config.yml
@@ -369,19 +388,20 @@ services:
         condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:9002/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 10
+      retries: 20
       start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: cards
+      OTEL_SERVICE_NAME: cards
 #      SPRING_DATASOURCE_URL: jdbc:postgresql://cardsdb:5432/cardsdb
     extends:
       file: common-config.yml
       service: microservice-eureka-config
 
-  api-gateway:
-    image: "harshaldev55/api-gateway:v1"
+  tw-api-gateway:
+    image: "harshaldev55/tw-api-gateway:v1"
     container_name: api-gateway-ms
     ports:
       - "8072:8072"
@@ -400,6 +420,7 @@ services:
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
       SPRING_DATA_REDIS_TIMEOUT: 1s
+      OTEL_SERVICE_NAME: api-gateway
     extends:
       file: common-config.yml
       service: microservice-eureka-config
