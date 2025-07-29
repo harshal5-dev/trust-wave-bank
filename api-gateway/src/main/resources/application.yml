@@ -19,11 +19,11 @@ spring:
         connect-timeout: 30000
         response-timeout: 10s
 
-#  security:
-#    oauth2:
-#      resourceserver:
-#        jwt:
-#          jwk-set-uri: http://localhost:7080/realms/master/protocol/openid-connect/certs
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:7080/realms/master/protocol/openid-connect/certs
 #  rabbitmq:
 #    host: "localhost"
 #    port: 5672
@@ -57,7 +57,7 @@ logging:
       trustwave:
         apigateway: DEBUG
   pattern:
-    console: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+    console: "%5p [${spring.application.name},%X{trace_id},%X{span_id}] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger{36} - %msg%n"
 
 
 resilience4j:

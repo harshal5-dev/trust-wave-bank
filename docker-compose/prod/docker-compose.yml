@@ -2,6 +2,19 @@
 name: "trust-wave-prod"
 
 services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.3.2
+    container_name: keycloak
+    ports:
+      - "127.0.0.1:7080:8080"
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: "admin"
+      KC_BOOTSTRAP_ADMIN_PASSWORD: "admin"
+    command: "start-dev"
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
   read:
     image: grafana/loki:latest
     command: "-config.file=/etc/loki/config.yaml -target=read"
@@ -325,8 +338,8 @@ services:
   accounts:
     image: "harshaldev55/accounts:v1"
     container_name: accounts-ms
-    ports:
-      - "9001:9001"
+#    ports:
+#      - "9001:9001"
     depends_on:
       config-server:
         condition: service_healthy
@@ -351,8 +364,8 @@ services:
   loans:
     image: "harshaldev55/loans:v1"
     container_name: loans-ms
-    ports:
-      - "9003:9003"
+#    ports:
+#      - "9003:9003"
     depends_on:
       config-server:
         condition: service_healthy
@@ -377,8 +390,8 @@ services:
   cards:
     image: "harshaldev55/cards:v1"
     container_name: cards-ms
-    ports:
-      - "9002:9002"
+#    ports:
+#      - "9002:9002"
     depends_on:
       config-server:
         condition: service_healthy
@@ -421,6 +434,7 @@ services:
       SPRING_DATA_REDIS_PORT: 6379
       SPRING_DATA_REDIS_TIMEOUT: 1s
       OTEL_SERVICE_NAME: api-gateway
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: "http://keycloak:8080/realms/master/protocol/openid-connect/certs"
     extends:
       file: common-config.yml
       service: microservice-eureka-config
