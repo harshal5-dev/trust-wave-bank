@@ -2,6 +2,7 @@ package com.trustwave.accounts.service.impl;
 
 import com.trustwave.accounts.constants.AccountsConstants;
 import com.trustwave.accounts.dto.AccountsDto;
+import com.trustwave.accounts.dto.AccountsMsgDto;
 import com.trustwave.accounts.dto.CustomerDto;
 import com.trustwave.accounts.exception.CustomerAlreadyExistsException;
 import com.trustwave.accounts.exception.ResourceNotFoundException;
@@ -13,6 +14,9 @@ import com.trustwave.accounts.repository.AccountsRepository;
 import com.trustwave.accounts.repository.CustomerRepository;
 import com.trustwave.accounts.service.IAccountsService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -23,8 +27,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AccountServiceImpl implements IAccountsService {
 
+  private static final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
   private final AccountsRepository accountsRepository;
   private final CustomerRepository customerRepository;
+  private final StreamBridge streamBridge;
 
   /**
    * This method is used to create a new customer.
@@ -42,7 +48,15 @@ public class AccountServiceImpl implements IAccountsService {
     }
 
     Customer savedCustomer = customerRepository.save(customer);
-    accountsRepository.save(createNewAccount(savedCustomer));
+    Accounts savedAccounts = accountsRepository.save(createNewAccount(savedCustomer));
+    sendCommunication(savedAccounts, savedCustomer);
+  }
+
+  private void sendCommunication(Accounts accounts, Customer customer) {
+    var accountsMsgDto = new AccountsMsgDto(accounts.getAccountNumber(), customer.getFullName(), customer.getEmail(), customer.getMobileNumber());
+    logger.info("Sending communication request for the details: {}", accountsMsgDto);
+    var result = streamBridge.send("sendCommunication-out-0", accountsMsgDto);
+    logger.info("Is the Communication request sent successfully triggered?: {}", result);
   }
 
   /**
@@ -128,6 +142,28 @@ public class AccountServiceImpl implements IAccountsService {
     accountsRepository.deleteByCustomerId(customer.getId());
     customerRepository.deleteById(customer.getId());
     return true;
+  }
+
+  /**
+   * This method is used to update the communication status of the account.
+   *
+   * @param accountNumber - Account number of the customer
+   * @return - boolean indicating success or failure of the update operation
+   */
+  @Override
+  public boolean updateCommunicationStatus(Long accountNumber) {
+    boolean isUpdated = false;
+
+    if (accountNumber != null) {
+      Accounts accounts = accountsRepository.findByAccountNumber(accountNumber)
+          .orElseThrow(() -> new ResourceNotFoundException("Account", "accountNumber", accountNumber.toString()));
+
+      accounts.setCommunicationSw(true);
+      accountsRepository.save(accounts);
+      isUpdated = true;
+    }
+
+    return isUpdated;
   }
 
 }

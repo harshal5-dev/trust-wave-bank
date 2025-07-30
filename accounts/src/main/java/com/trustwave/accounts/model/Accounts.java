@@ -23,6 +23,9 @@ public class Accounts extends BaseModel {
   @Column(name = "branch_address")
   private String branchAddress;
 
+  @Column(name = "communication_sw")
+  private Boolean communicationSw;
+
   @Column(name = "customer_id")
   private UUID customerId;
 }

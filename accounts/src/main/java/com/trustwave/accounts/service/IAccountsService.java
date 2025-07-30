@@ -35,4 +35,13 @@ public interface IAccountsService {
    * @return - boolean indicating success or failure of the delete operation
    */
   boolean deleteAccount(String mobileNumber);
+
+
+  /**
+   * This method is used to update the communication status of the account.
+   *
+   * @param accountNumber - Account number of the customer
+   * @return - boolean indicating success or failure of the update operation
+   */
+  boolean updateCommunicationStatus(Long accountNumber);
 }

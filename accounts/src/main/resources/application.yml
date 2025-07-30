@@ -34,11 +34,21 @@ spring:
     openfeign:
       circuitbreaker:
         enabled: true
-#  rabbitmq:
-#    host: "localhost"
-#    port: 5672
-#    username: "guest"
-#    password: "guest"
+    function:
+      definition: updateCommunication
+    stream:
+      bindings:
+        updateCommunication-in-0:
+          destination: communication-sent
+          group: ${spring.application.name}
+        sendCommunication-out-0:
+          destination: send-communication
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "guest"
+    password: "guest"
+    connection-timeout: 10s
 
 management:
   endpoints:
@@ -84,7 +94,7 @@ logging:
       trustwave:
         accounts: DEBUG
   pattern:
-    console: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+    console: "%5p [${spring.application.name},%X{trace_id},%X{span_id}] %d{yyyy-MM-dd HH:mm:ss} - %m%n"
 
 resilience4j:
   circuitbreaker:

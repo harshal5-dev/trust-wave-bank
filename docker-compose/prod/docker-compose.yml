@@ -2,6 +2,22 @@
 name: "trust-wave-prod"
 
 services:
+  rabbit:
+    image: rabbitmq:4-management
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: "rabbitmq-diagnostics check_port_connectivity"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
   keycloak:
     image: quay.io/keycloak/keycloak:26.3.2
     container_name: keycloak
@@ -266,22 +282,6 @@ services:
 #      file: common-config.yml
 #      service: microservice-db-config
 
-#  rabbit:
-#    image: rabbitmq:4-management
-#    hostname: rabbitmq
-#    ports:
-#      - "5672:5672"
-#      - "15672:15672"
-#    healthcheck:
-#      test: "rabbitmq-diagnostics check_port_connectivity"
-#      interval: 10s
-#      timeout: 5s
-#      retries: 10
-#      start_period: 5s
-#    extends:
-#      file: common-config.yml
-#      service: network-deploy-service
-
   redis:
     image: redis
     ports:
@@ -347,6 +347,8 @@ services:
 #        condition: service_healthy
       eureka-discovery-server:
        condition: service_healthy
+      rabbit:
+        condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:9001/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -356,6 +358,7 @@ services:
     environment:
       SPRING_APPLICATION_NAME: accounts
       OTEL_SERVICE_NAME: accounts
+      SPRING_RABBITMQ_HOST: rabbit
 #      SPRING_DATASOURCE_URL: jdbc:postgresql://accountsdb:5432/accountsdb
     extends:
       file: common-config.yml
@@ -412,6 +415,18 @@ services:
     extends:
       file: common-config.yml
       service: microservice-eureka-config
+
+  message:
+    image: "harshaldev55/message:v1"
+    container_name: message-ms
+    depends_on:
+      rabbit:
+        condition: service_healthy
+    environment:
+      SPRING_RABBITMQ_HOST: "rabbit"
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
 
   tw-api-gateway:
     image: "harshaldev55/tw-api-gateway:v1"
