@@ -1,0 +1,6 @@
+dependencies:
+- name: trustwave-common
+  repository: file://../../trustwave-common
+  version: 0.1.0
+digest: sha256:2e1c376fbfe4397b2fbb16bf035f036bad7d140a63d3ac127af1a713313c2bd2
+generated: "2025-08-27T21:56:55.420486+05:30"

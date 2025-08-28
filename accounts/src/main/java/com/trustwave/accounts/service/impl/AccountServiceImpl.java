@@ -49,7 +49,7 @@ public class AccountServiceImpl implements IAccountsService {
 
     Customer savedCustomer = customerRepository.save(customer);
     Accounts savedAccounts = accountsRepository.save(createNewAccount(savedCustomer));
-    sendCommunication(savedAccounts, savedCustomer);
+    // sendCommunication(savedAccounts, savedCustomer);
   }
 
   private void sendCommunication(Accounts accounts, Customer customer) {
