@@ -1,0 +1,27 @@
+dependencies:
+- name: trustwave-common
+  repository: file://../../trustwave-common
+  version: 0.1.0
+- name: configserver
+  repository: file://../../trustwave-services/configserver
+  version: 0.1.0
+- name: eurekaserver
+  repository: file://../../trustwave-services/eurekaserver
+  version: 0.1.0
+- name: accounts
+  repository: file://../../trustwave-services/accounts
+  version: 0.1.0
+- name: cards
+  repository: file://../../trustwave-services/cards
+  version: 0.1.0
+- name: loans
+  repository: file://../../trustwave-services/loans
+  version: 0.1.0
+- name: gatewayserver
+  repository: file://../../trustwave-services/gatewayserver
+  version: 0.1.0
+- name: message
+  repository: file://../../trustwave-services/message
+  version: 0.1.0
+digest: sha256:734d17c6b3b05fcac0d75f300a81283ede2ab2483073fdaaeda0bfe7a5c32808
+generated: "2025-08-28T09:35:12.450643+05:30"
