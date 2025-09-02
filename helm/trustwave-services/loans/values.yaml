@@ -10,7 +10,7 @@ replicaCount: 1
 
 image:
   repository: harshaldev55/loans
-  tag: v1
+  tag: v2
 
 containerPort: 8090
 
@@ -22,7 +22,8 @@ service:
 appname_enabled: true
 profile_enabled: true
 config_enabled: true
-eureka_enabled: true
+eureka_enabled: false
+discovery_enabled: true
 resouceserver_enabled: false
 otel_enabled: true
 kafka_enabled: false

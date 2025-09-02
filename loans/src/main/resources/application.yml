@@ -10,23 +10,27 @@ spring:
     url: jdbc:h2:mem:loansdb
     driverClassName: org.h2.Driver
     username: sa
-    password: ''
+    password: ""
   h2:
     console:
       enabled: true
-#    url: jdbc:postgresql://localhost:5435/loansdb
-#    username: root
-#    password: 12345
+  #    url: jdbc:postgresql://localhost:5435/loansdb
+  #    username: root
+  #    password: 12345
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
     hibernate:
       ddl-auto: update
-#  sql:
-#    init:
-#      mode: always
+  #  sql:
+  #    init:
+  #      mode: always
   config:
     import: "optional:configserver:http://localhost:8071/"
+  cloud:
+    kubernetes:
+      discovery:
+        all-namespaces: true
 #  rabbitmq:
 #    host: "localhost"
 #    port: 5672
@@ -39,9 +43,9 @@ management:
       exposure:
         include: "*"
   health:
-    readiness-state:
+    readinessstate:
       enabled: true
-    liveness-state:
+    livenessstate:
       enabled: true
   endpoint:
     shutdown:
@@ -56,14 +60,14 @@ management:
     tags:
       application: ${spring.application.name}
 
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    fetchRegistry: true
-    registerWithEureka: true
-    serviceUrl:
-      defaultZone: http://localhost:8070/eureka/
+# eureka:
+#   instance:
+#     prefer-ip-address: true
+#   client:
+#     fetchRegistry: true
+#     registerWithEureka: true
+#     serviceUrl:
+#       defaultZone: http://localhost:8070/eureka/
 
 info:
   app:
@@ -77,4 +81,4 @@ logging:
       trustwave:
         loans: DEBUG
   pattern:
-    console: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+    console: "%5p [${spring.application.name},%X{trace_id},%X{span_id}] --- [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %-40.40logger{39} : %m%n"

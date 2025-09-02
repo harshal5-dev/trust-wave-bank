@@ -1,4 +1,3 @@
-
 #server:
 #  port: 9001
 
@@ -11,14 +10,13 @@ spring:
     url: jdbc:h2:mem:accountsdb
     driverClassName: org.h2.Driver
     username: sa
-    password: ''
+    password: ""
   h2:
     console:
       enabled: true
   #    url: jdbc:postgresql://localhost:5434/accountsdb
-#    username: root
-#    password: 12345
-
+  #    username: root
+  #    password: 12345
 
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
@@ -26,11 +24,14 @@ spring:
     hibernate:
       ddl-auto: update
   #  sql:
-#    init:
-#      mode: always
+  #    init:
+  #      mode: always
   config:
     import: "optional:configserver:http://localhost:8071/"
   cloud:
+    kubernetes:
+      discovery:
+        all-namespaces: true
     openfeign:
       circuitbreaker:
         enabled: true
@@ -77,14 +78,14 @@ management:
     tags:
       application: ${spring.application.name}
 
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    fetchRegistry: true
-    registerWithEureka: true
-    serviceUrl:
-      defaultZone: http://localhost:8070/eureka/
+# eureka:
+#   instance:
+#     prefer-ip-address: true
+#   client:
+#     fetchRegistry: true
+#     registerWithEureka: true
+#     serviceUrl:
+#       defaultZone: http://localhost:8070/eureka/
 
 info:
   app:
@@ -116,8 +117,8 @@ resilience4j:
         waitDuration: 500
         enable-exponential-backoff: true
         exponential-backoff-multiplier: 2
-#        ignore-exceptions:
-#          - java.lang.NullPointerException
+        #        ignore-exceptions:
+        #          - java.lang.NullPointerException
         retry-exceptions:
           - java.util.concurrent.TimeoutException
 
