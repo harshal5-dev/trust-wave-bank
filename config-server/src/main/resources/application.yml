@@ -28,7 +28,6 @@ spring:
 encrypt:
   key: "e9f3b8b6a5d4719f8473c23f2de0a62c09c59d1f627e4e97fbbc2d1f82e9cba1"
 
-
 management:
   endpoints:
     web:
@@ -53,4 +52,4 @@ logging:
       trustwave:
         configserver: DEBUG
   pattern:
-    console: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p){red=ERROR,yellow=WARN,green=INFO,blue=DEBUG,magenta=TRACE} %clr([${spring.application.name:config-server}]){cyan} %clr([%X{traceId:-},%X{spanId:-}]){yellow} %clr(%logger{36}){blue} %clr(:){faint} %m%n"

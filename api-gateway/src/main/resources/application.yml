@@ -11,13 +11,15 @@ spring:
     import: "optional:configserver:http://localhost:8071/"
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: false
-          lower-case-service-id: true
-      httpclient:
-        connect-timeout: 30000
-        response-timeout: 10s
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: false
+              lower-case-service-id: true
+          httpclient:
+            connect-timeout: 30000
+            response-timeout: 10s
 
   security:
     oauth2:
@@ -57,8 +59,7 @@ logging:
       trustwave:
         apigateway: DEBUG
   pattern:
-    console: "%5p [${spring.application.name},%X{trace_id},%X{span_id}] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger{36} - %msg%n"
-
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p){red=ERROR,yellow=WARN,green=INFO,blue=DEBUG,magenta=TRACE} %clr([${spring.application.name:config-server}]){cyan} %clr([%X{traceId:-},%X{spanId:-}]){yellow} %clr(%logger{36}){blue} %clr(:){faint} %m%n"
 
 resilience4j:
   circuitbreaker:
