@@ -1,5 +1,12 @@
 package com.trustwave.accounts.service.impl;
 
+import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.stereotype.Service;
 import com.trustwave.accounts.constants.AccountsConstants;
 import com.trustwave.accounts.dto.AccountsDto;
 import com.trustwave.accounts.dto.AccountsMsgDto;
@@ -14,14 +21,6 @@ import com.trustwave.accounts.repository.AccountsRepository;
 import com.trustwave.accounts.repository.CustomerRepository;
 import com.trustwave.accounts.service.IAccountsService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -40,20 +39,22 @@ public class AccountServiceImpl implements IAccountsService {
   @Override
   public void createCustomer(CustomerDto customerDto) {
     Customer customer = CustomerMapper.mapToCustomer(customerDto, new Customer());
-    Optional<Customer> optionalCustomer = customerRepository.findByMobileNumber(customerDto.getMobileNumber());
+    Optional<Customer> optionalCustomer =
+        customerRepository.findByMobileNumber(customerDto.getMobileNumber());
 
     if (optionalCustomer.isPresent()) {
-      throw new CustomerAlreadyExistsException("Customer already registered with given mobileNumber " +
-          customerDto.getMobileNumber());
+      throw new CustomerAlreadyExistsException(
+          "Customer already registered with given mobileNumber " + customerDto.getMobileNumber());
     }
 
     Customer savedCustomer = customerRepository.save(customer);
     Accounts savedAccounts = accountsRepository.save(createNewAccount(savedCustomer));
-    // sendCommunication(savedAccounts, savedCustomer);
+    sendCommunication(savedAccounts, savedCustomer);
   }
 
   private void sendCommunication(Accounts accounts, Customer customer) {
-    var accountsMsgDto = new AccountsMsgDto(accounts.getAccountNumber(), customer.getFullName(), customer.getEmail(), customer.getMobileNumber());
+    var accountsMsgDto = new AccountsMsgDto(accounts.getAccountNumber(), customer.getFullName(),
+        customer.getEmail(), customer.getMobileNumber());
     logger.info("Sending communication request for the details: {}", accountsMsgDto);
     var result = streamBridge.send("sendCommunication-out-0", accountsMsgDto);
     logger.info("Is the Communication request sent successfully triggered?: {}", result);
@@ -88,8 +89,8 @@ public class AccountServiceImpl implements IAccountsService {
     Customer customer = customerRepository.findByMobileNumber(mobileNumber)
         .orElseThrow(() -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber));
 
-    Accounts accounts = accountsRepository.findByCustomerId(customer.getId())
-        .orElseThrow(() -> new ResourceNotFoundException("Account", "customerId", customer.getId().toString()));
+    Accounts accounts = accountsRepository.findByCustomerId(customer.getId()).orElseThrow(
+        () -> new ResourceNotFoundException("Account", "customerId", customer.getId().toString()));
 
     CustomerDto customerDto = CustomerMapper.mapToCustomerDto(customer, new CustomerDto());
     customerDto.setAccountsDto(AccountMapper.mapToAccountsDto(accounts, new AccountsDto()));
@@ -110,15 +111,16 @@ public class AccountServiceImpl implements IAccountsService {
 
     if (accountsDto != null) {
       Accounts accounts = accountsRepository.findByAccountNumber(accountsDto.getAccountNumber())
-          .orElseThrow(() -> new ResourceNotFoundException("Account", "AccountNumber", accountsDto.getAccountNumber().toString()));
+          .orElseThrow(() -> new ResourceNotFoundException("Account", "AccountNumber",
+              accountsDto.getAccountNumber().toString()));
 
       AccountMapper.mapToAccounts(accountsDto, accounts);
       accounts = accountsRepository.save(accounts);
 
       UUID customerId = accounts.getCustomerId();
 
-      Customer customer = customerRepository.findById(customerId)
-          .orElseThrow(() -> new ResourceNotFoundException("Customer", "customerId", customerId.toString()));
+      Customer customer = customerRepository.findById(customerId).orElseThrow(
+          () -> new ResourceNotFoundException("Customer", "customerId", customerId.toString()));
 
       CustomerMapper.mapToCustomer(customerDto, customer);
       customerRepository.save(customer);
@@ -156,7 +158,8 @@ public class AccountServiceImpl implements IAccountsService {
 
     if (accountNumber != null) {
       Accounts accounts = accountsRepository.findByAccountNumber(accountNumber)
-          .orElseThrow(() -> new ResourceNotFoundException("Account", "accountNumber", accountNumber.toString()));
+          .orElseThrow(() -> new ResourceNotFoundException("Account", "accountNumber",
+              accountNumber.toString()));
 
       accounts.setCommunicationSw(true);
       accountsRepository.save(accounts);
