@@ -113,10 +113,10 @@ image:
 auth:
   ## @param auth.adminUser Keycloak administrator user
   ##
-  adminUser: "harshal70007"
+  adminUser: "admin"
   ## @param auth.adminPassword Keycloak administrator password for the new user
   ##
-  adminPassword: "Bounty@123"
+  adminPassword: "123456"
   ## @param auth.existingSecret Existing secret containing Keycloak admin password
   ##
   existingSecret: ""
