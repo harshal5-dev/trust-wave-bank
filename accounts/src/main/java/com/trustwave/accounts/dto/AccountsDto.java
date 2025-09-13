@@ -10,30 +10,21 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Schema(
-        name = "Accounts",
-        description = "Schema to hold Account information"
-)
+@Schema(name = "Accounts", description = "Schema to hold Account information")
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountsDto {
 
-  @Schema(
-          description = "Account Number of Trust Wave Bank account", example = "3454433243"
-  )
+  @Schema(description = "Account Number of Trust Wave Bank account", example = "3454433243")
   @NotEmpty(message = "Account number cannot be null or empty")
   @Pattern(regexp = "^\\d{10}$", message = "Account number should be 10 digits")
   private Long accountNumber;
 
-  @Schema(
-          description = "Account type of Trust Wave Bank account", example = "Savings"
-  )
+  @Schema(description = "Account type of Trust Wave Bank account", example = "Savings")
   @NotEmpty(message = "Account type cannot be null or empty")
   private String accountType;
 
-  @Schema(
-          description = "Trust Wave Bank branch address", example = "123 NewYork"
-  )
+  @Schema(description = "Trust Wave Bank branch address", example = "123 NewYork")
   @NotEmpty(message = "Branch address cannot be null or empty")
   private String branchAddress;
 }

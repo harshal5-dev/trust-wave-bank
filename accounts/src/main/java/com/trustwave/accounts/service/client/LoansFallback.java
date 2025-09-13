@@ -1,8 +1,8 @@
 package com.trustwave.accounts.service.client;
 
-import com.trustwave.accounts.dto.LoansDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import com.trustwave.accounts.dto.LoansDto;
 
 @Component
 public class LoansFallback implements LoansFeignClient {

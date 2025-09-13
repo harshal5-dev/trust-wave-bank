@@ -1,12 +1,11 @@
 package com.trustwave.accounts.functions;
 
-import com.trustwave.accounts.service.IAccountsService;
+import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.function.Consumer;
+import com.trustwave.accounts.service.IAccountsService;
 
 @Configuration
 public class AccountsFunctions {

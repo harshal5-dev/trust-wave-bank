@@ -1,5 +1,7 @@
 package com.trustwave.accounts.service.impl;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import com.trustwave.accounts.dto.AccountsDto;
 import com.trustwave.accounts.dto.CardsDto;
 import com.trustwave.accounts.dto.CustomerDetailsDto;
@@ -15,8 +17,6 @@ import com.trustwave.accounts.service.ICustomerService;
 import com.trustwave.accounts.service.client.CardsFeignClient;
 import com.trustwave.accounts.service.client.LoansFeignClient;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
@@ -36,19 +36,22 @@ public class CustomerServiceImpl implements ICustomerService {
   @Override
   public CustomerDetailsDto getCustomerDetails(String mobileNumber, String correlationId) {
     Customer customer = customerRepository.findByMobileNumber(mobileNumber)
-            .orElseThrow(() -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber));
+        .orElseThrow(() -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber));
 
-    Accounts accounts = accountsRepository.findByCustomerId(customer.getId())
-            .orElseThrow(() -> new ResourceNotFoundException("Account", "customerId", customer.getId().toString()));
+    Accounts accounts = accountsRepository.findByCustomerId(customer.getId()).orElseThrow(
+        () -> new ResourceNotFoundException("Account", "customerId", customer.getId().toString()));
 
-    CustomerDetailsDto customerDetailsDto = CustomerMapper.mapToCustomerDetailsDto(customer, new CustomerDetailsDto());
+    CustomerDetailsDto customerDetailsDto =
+        CustomerMapper.mapToCustomerDetailsDto(customer, new CustomerDetailsDto());
     customerDetailsDto.setAccountsDto(AccountMapper.mapToAccountsDto(accounts, new AccountsDto()));
 
-    ResponseEntity<LoansDto> loansDtoResEntity = loansFeignClient.fetchLoan(correlationId, mobileNumber);
+    ResponseEntity<LoansDto> loansDtoResEntity =
+        loansFeignClient.fetchLoan(correlationId, mobileNumber);
     if (loansDtoResEntity != null) {
       customerDetailsDto.setLoansDto(loansDtoResEntity.getBody());
     }
-    ResponseEntity<CardsDto> cardsDtoResEntity = cardsFeignClient.fetchCard(correlationId, mobileNumber);
+    ResponseEntity<CardsDto> cardsDtoResEntity =
+        cardsFeignClient.fetchCard(correlationId, mobileNumber);
 
     if (cardsDtoResEntity != null) {
       customerDetailsDto.setCardsDto(cardsDtoResEntity.getBody());
