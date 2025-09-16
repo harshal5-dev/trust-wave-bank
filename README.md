@@ -394,9 +394,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 **Harshal** - [@harshal5-dev](https://github.com/harshal5-dev)
 
-- 💼 [Portfolio](https://github.com/harshal5-dev/Portfolio)
 - 🛒 [Cloud Kart Project](https://github.com/harshal5-dev/cloud-kart)
-- ⚙️ [Configuration Management](https://github.com/harshal5-dev/cloud-kart-config)
 
 ---
 
